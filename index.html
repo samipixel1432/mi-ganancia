@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mi Ganancia Diaria</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="topbar" aria-label="Resumen principal">
+        <div class="brand-block">
+          <div class="title-row">
+            <p class="eyebrow">Control de ganancias</p>
+            <span class="beta-badge">Beta local</span>
+          </div>
+          <h1>Mi Ganancia Diaria</h1>
+          <p class="date-line" id="currentDate"></p>
+          <div class="status-row" aria-label="Estado de la app">
+            <span>Sin login</span>
+            <span>Guardado local</span>
+            <span>Resumen automatico</span>
+          </div>
+        </div>
+        <button class="icon-button danger-control" id="clearPeriodBtn" type="button" aria-label="Limpiar movimientos del periodo" title="Limpiar periodo">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V5h6v2M7 7l1 14h8l1-14M10 11v6M14 11v6"/></svg>
+        </button>
+      </section>
+
+      <section class="period-panel" aria-label="Periodo de resumen">
+        <div class="segmented period-tabs" role="tablist" aria-label="Elegir periodo">
+          <button class="period-button active" type="button" data-period="day">Dia</button>
+          <button class="period-button" type="button" data-period="week">Semana</button>
+          <button class="period-button" type="button" data-period="month">Mes</button>
+        </div>
+        <div class="period-switcher">
+          <button class="nav-button" id="previousPeriodBtn" type="button" aria-label="Periodo anterior" title="Periodo anterior">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 6-6 6 6 6"/></svg>
+          </button>
+          <strong id="periodLabel">Hoy</strong>
+          <button class="nav-button" id="nextPeriodBtn" type="button" aria-label="Periodo siguiente" title="Periodo siguiente">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="summary-grid" aria-label="Resumen de dinero">
+        <article class="metric primary">
+          <span>Ganancia final</span>
+          <strong id="netProfit">$0</strong>
+          <small>Despues de gastos</small>
+        </article>
+        <article class="metric">
+          <span>Ganancia en ventas</span>
+          <strong id="grossProfit">$0</strong>
+          <small>Utilidad bruta</small>
+        </article>
+        <article class="metric">
+          <span>Total vendido</span>
+          <strong id="totalSales">$0</strong>
+          <small>Ingresos registrados</small>
+        </article>
+        <article class="metric danger">
+          <span>Gastos</span>
+          <strong id="totalExpenses">$0</strong>
+          <small>Salidas del periodo</small>
+        </article>
+      </section>
+
+      <section class="workspace">
+        <form class="panel" id="saleForm" autocomplete="off">
+          <div class="panel-heading">
+            <div class="panel-icon income" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 3v18M17 8.5c0-2-1.8-3.5-5-3.5S7 6.5 7 8.5s1.8 3.1 5 3.5 5 1.5 5 3.5-1.8 3.5-5 3.5-5-1.5-5-3.5"/></svg>
+            </div>
+            <div>
+              <h2>Agregar venta</h2>
+              <p>Guarda producto, precio vendido, ganancia real y fecha.</p>
+            </div>
+          </div>
+
+          <label>
+            Producto
+            <input id="saleProduct" name="product" type="text" placeholder="Ej: Cepillo" required />
+          </label>
+
+          <label>
+            Fecha
+            <input id="saleDate" name="saleDate" type="date" required />
+          </label>
+
+          <div class="two-columns">
+            <label>
+              Vendido en
+              <input id="saleAmount" name="saleAmount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="90" required />
+            </label>
+            <label>
+              Gane
+              <input id="saleProfit" name="saleProfit" type="number" inputmode="decimal" min="0" step="0.01" placeholder="20" required />
+            </label>
+          </div>
+
+          <button class="action-button income-button" type="submit">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            Guardar venta
+          </button>
+        </form>
+
+        <form class="panel" id="expenseForm" autocomplete="off">
+          <div class="panel-heading">
+            <div class="panel-icon expense" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M4 7h16M7 7V5h10v2M6 7l1 14h10l1-14M10 11v6M14 11v6"/></svg>
+            </div>
+            <div>
+              <h2>Agregar gasto</h2>
+              <p>Resta compras, transporte, comida o cualquier salida.</p>
+            </div>
+          </div>
+
+          <label>
+            Motivo
+            <input id="expenseName" name="expenseName" type="text" placeholder="Ej: Transporte" required />
+          </label>
+
+          <label>
+            Fecha
+            <input id="expenseDate" name="expenseDate" type="date" required />
+          </label>
+
+          <label>
+            Cuanto gaste
+            <input id="expenseAmount" name="expenseAmount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="10" required />
+          </label>
+
+          <button class="action-button expense-button" type="submit">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>
+            Guardar gasto
+          </button>
+        </form>
+      </section>
+
+      <section class="breakdown-section" aria-label="Resumen por dias">
+        <div class="history-header">
+          <div>
+            <p class="eyebrow">Resumen</p>
+            <h2 id="breakdownTitle">Por dias</h2>
+          </div>
+        </div>
+        <div class="breakdown-list" id="breakdownList"></div>
+      </section>
+
+      <section class="history-section" aria-label="Historial del periodo">
+        <div class="history-header">
+          <div>
+            <p class="eyebrow">Movimientos</p>
+            <h2 id="historyTitle">Periodo actual</h2>
+          </div>
+          <div class="segmented" role="tablist" aria-label="Filtrar movimientos">
+            <button class="filter-button active" type="button" data-filter="all">Todos</button>
+            <button class="filter-button" type="button" data-filter="sale">Ventas</button>
+            <button class="filter-button" type="button" data-filter="expense">Gastos</button>
+          </div>
+        </div>
+
+        <div class="empty-state" id="emptyState">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+          <p>Aun no hay movimientos guardados en este periodo.</p>
+        </div>
+
+        <ul class="movement-list" id="movementList"></ul>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
