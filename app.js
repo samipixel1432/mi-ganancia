@@ -9,8 +9,6 @@ const state = {
 };
 
 const moneyFormatter = new Intl.NumberFormat("es-CO", {
-  style: "currency",
-  currency: "COP",
   maximumFractionDigits: 0,
 });
 
@@ -427,7 +425,7 @@ function getMovementCost(movement) {
 }
 
 function formatMoney(value) {
-  return moneyFormatter.format(value);
+  return `COP ${moneyFormatter.format(value)}`;
 }
 
 function capitalize(value) {
