@@ -75,7 +75,7 @@
             </div>
             <div>
               <h2>Agregar venta</h2>
-              <p>Guarda producto, precio vendido, ganancia real y fecha.</p>
+              <p>Guarda producto, precio vendido, costo y fecha. La ganancia se calcula sola.</p>
             </div>
           </div>
 
@@ -95,9 +95,14 @@
               <input id="saleAmount" name="saleAmount" type="number" inputmode="decimal" min="0" step="0.01" placeholder="90" required />
             </label>
             <label>
-              Gane
-              <input id="saleProfit" name="saleProfit" type="number" inputmode="decimal" min="0" step="0.01" placeholder="20" required />
+              A cuanto me sale
+              <input id="saleCost" name="saleCost" type="number" inputmode="decimal" min="0" step="0.01" placeholder="70" required />
             </label>
+          </div>
+
+          <div class="profit-preview" aria-live="polite">
+            <span>Ganancia calculada</span>
+            <strong id="saleProfitPreview">$0</strong>
           </div>
 
           <button class="action-button income-button" type="submit">

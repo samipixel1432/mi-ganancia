@@ -19,7 +19,8 @@ http://127.0.0.1:4173/
 ## Qué hace
 
 - Tiene una interfaz estilo dashboard beta, pensada para verse bien local y en celular.
-- Agrega ventas con producto, precio vendido y ganancia real.
+- Agrega ventas con producto, precio vendido y costo.
+- Calcula automaticamente la ganancia de cada venta.
 - Agrega gastos para restarlos del día.
 - Permite escoger la fecha de cada venta o gasto.
 - Muestra resumen diario, semanal y mensual.

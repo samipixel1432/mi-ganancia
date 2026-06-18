@@ -47,7 +47,8 @@ const elements = {
   saleProduct: document.querySelector("#saleProduct"),
   saleDate: document.querySelector("#saleDate"),
   saleAmount: document.querySelector("#saleAmount"),
-  saleProfit: document.querySelector("#saleProfit"),
+  saleCost: document.querySelector("#saleCost"),
+  saleProfitPreview: document.querySelector("#saleProfitPreview"),
   expenseForm: document.querySelector("#expenseForm"),
   expenseName: document.querySelector("#expenseName"),
   expenseDate: document.querySelector("#expenseDate"),
@@ -67,6 +68,7 @@ const elements = {
 elements.currentDate.textContent = capitalize(longDateFormatter.format(new Date()));
 elements.saleDate.value = getDateKey(new Date());
 elements.expenseDate.value = getDateKey(new Date());
+updateSaleProfitPreview();
 render();
 
 elements.saleForm.addEventListener("submit", (event) => {
@@ -74,23 +76,29 @@ elements.saleForm.addEventListener("submit", (event) => {
 
   const product = elements.saleProduct.value.trim();
   const amount = toNumber(elements.saleAmount.value);
-  const profit = toNumber(elements.saleProfit.value);
+  const cost = toNumber(elements.saleCost.value);
+  const profit = amount - cost;
   const date = parseDateInput(elements.saleDate.value);
 
-  if (!product || amount <= 0 || profit <= 0 || !date) return;
+  if (!product || amount <= 0 || cost < 0 || profit <= 0 || !date) return;
 
   addMovement({
     type: "sale",
     title: product,
     amount,
+    cost,
     profit,
     createdAt: createMovementDate(date).toISOString(),
   });
 
   elements.saleForm.reset();
   elements.saleDate.value = getDateKey(new Date());
+  updateSaleProfitPreview();
   elements.saleProduct.focus();
 });
+
+elements.saleAmount.addEventListener("input", updateSaleProfitPreview);
+elements.saleCost.addEventListener("input", updateSaleProfitPreview);
 
 elements.expenseForm.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -199,7 +207,9 @@ function createMovementTemplate(movement) {
   const isSale = movement.type === "sale";
   const mainAmount = isSale ? movement.profit : movement.amount;
   const sign = isSale ? "+" : "-";
-  const secondaryText = isSale ? `Vendido en ${formatMoney(movement.amount)}` : "Gasto registrado";
+  const secondaryText = isSale
+    ? `Vendido en ${formatMoney(movement.amount)} | Costo ${formatMoney(getMovementCost(movement))}`
+    : "Gasto registrado";
 
   return `
     <li class="movement-item ${movement.type}">
@@ -358,6 +368,7 @@ function normalizeMovements(movements) {
     .map((movement) => ({
       ...movement,
       amount: toNumber(movement.amount),
+      cost: movement.type === "sale" ? getMovementCost(movement) : 0,
       profit: movement.type === "sale" ? toNumber(movement.profit) : 0,
     }));
 }
@@ -400,6 +411,19 @@ function getDateKey(date) {
 
 function toNumber(value) {
   return Number.parseFloat(value) || 0;
+}
+
+function updateSaleProfitPreview() {
+  const profit = toNumber(elements.saleAmount.value) - toNumber(elements.saleCost.value);
+  elements.saleProfitPreview.textContent = formatMoney(Math.max(profit, 0));
+}
+
+function getMovementCost(movement) {
+  if (movement.type !== "sale") return 0;
+  const savedCost = toNumber(movement.cost);
+  if (savedCost > 0 || movement.cost === 0) return savedCost;
+
+  return Math.max(toNumber(movement.amount) - toNumber(movement.profit), 0);
 }
 
 function formatMoney(value) {

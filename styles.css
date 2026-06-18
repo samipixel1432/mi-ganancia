@@ -432,6 +432,35 @@ input:focus {
   gap: 12px;
 }
 
+.profit-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 58px;
+  padding: 13px 14px;
+  border: 1px solid rgba(20, 120, 79, 0.2);
+  border-radius: 8px;
+  background: var(--income-soft);
+}
+
+.profit-preview span,
+.profit-preview strong {
+  display: block;
+}
+
+.profit-preview span {
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 900;
+}
+
+.profit-preview strong {
+  color: var(--income);
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
 .action-button {
   display: inline-flex;
   min-height: 52px;
@@ -653,12 +682,18 @@ input:focus {
 
   .two-columns,
   .movement-item,
-  .breakdown-item {
+  .breakdown-item,
+  .profit-preview {
     grid-template-columns: 1fr;
   }
 
   .movement-amount,
   .breakdown-money {
     text-align: left;
+  }
+
+  .profit-preview {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
